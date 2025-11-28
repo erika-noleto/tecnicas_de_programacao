@@ -1,267 +1,271 @@
-# 📚 Documentação Complementar da Disciplina
 
-## *Sistema de Gestão Farmacêutica – Versão 2.0*
-
----
-
-# 🏗 1. Projeto – Aplicação CRUD
-
-Este sistema implementa operações *CRUD completas* para medicamentos e laboratórios, utilizando Python e estruturas de dados baseadas em listas e dicionários.
-
-### *Funcionalidades implementadas*
-
-* *Create*
-
-  * Cadastrar medicamentos
-  * Cadastrar novos laboratórios implicitamente ao criar medicamentos
-* *Read*
-
-  * Listar laboratórios
-  * Listar medicamentos por urgência
-  * Gerar relatórios por categoria
-* *Update*
-
-  * Editar nome de laboratório
-* *Delete*
-
-  * Excluir laboratório (e seus medicamentos)
-  * Excluir medicamento individual
-
-### *Estrutura de Dados Usada*
-
-python
-medicamentos: List[Dict[str, str]] = [
-    {
-        "nome": "...",
-        "apresentacao": "...",
-        "laboratorio": "...",
-        "quantidade": int,
-        "urgencia": "verde/amarelo/vermelho"
-    }
-]
-
+# # 📘 **DOCUMENTAÇÃO COMPLEMENTAR – SISTEMA DE LISTA DE COMPRAS – FARMÁCIA**
 
 ---
 
-# 🧠 2. Pseudocódigo do Sistema
+# ## 📌 1. Projeto Desenvolvido com Aplicação CRUD
 
-## *Função cadastrar_medicamentos()*
+### **Descrição Geral**
 
+O sistema gerencia medicamentos que precisam ser comprados pela farmácia, organizados por:
 
-enquanto verdadeiro:
-    exibe cabeçalho
-    nome ← ler entrada do usuário
-    se nome == "voltar": sair do loop
+* Nome
+* Apresentação
+* Laboratório
+* Quantidade
+* Nível de urgência (verde, amarelo, vermelho)
 
-    se nome vazio: mostrar erro e continuar
+O programa permite:
 
-    apresentação ← ler
-    laboratório ← ler
-    se algum estiver vazio: erro e continuar
-
-    repetir até quantidade válida:
-        ler quantidade
-        se número e > 0: ok
-        senão: erro
-
-    repetir até urgência válida:
-        ler urgência
-        se urgência ∈ {verde, amarelo, vermelho}: ok
-        senão: erro
-
-    se medicamento já existe (mesmo nome + laboratório):
-        erro e continuar
-
-    criar dicionário com os dados
-    adicionar à lista
-
-    perguntar se deseja continuar
-    se não: sair
-
+* **C**reate → Cadastrar medicamentos
+* **R**ead → Listar laboratórios e gerar listas por urgência
+* **U**pdate → Editar laboratório
+* **D**elete → Excluir laboratório e excluir medicamentos
 
 ---
 
-## *Função listar_laboratorios()*
+# ## 📌 2. Pseudocódigo do Sistema
 
-
-extrair laboratório de cada medicamento
-usar conjunto para remover duplicados
-ordenar alfabeticamente
-retornar lista
-
+A seguir, todo o funcionamento do sistema está descrito em **pseudocódigo**, de forma clara e padronizada.
 
 ---
 
-## *Função editar_laboratorio()*
+## ### 🔷 **Função: cadastrar_medicamentos**
 
+```
+ENQUANTO verdadeiro
+    Mostrar título "Cadastro"
+    Ler nome
+    SE nome == "voltar"
+        SAIR do loop
+    FIM SE
 
+    Ler apresentação
+    Ler laboratório
+
+    REPETIR
+        Ler quantidade
+    ATÉ quantidade seja inteiro >= 0
+
+    REPETIR
+        Ler urgencia
+    ATÉ urgencia esteja em {verde, amarelo, vermelho}
+
+    Adicionar medicamento à lista
+    Mostrar "Medicamente adicionado"
+FIM ENQUANTO
+```
+
+---
+
+## ### 🔷 **Função: listar_laboratorios**
+
+```
+Criar conjunto vazio laboratórios
+PARA cada medicamento na lista
+    Adicionar laboratório ao conjunto
+ORDENAR conjunto
+RETORNAR lista ordenada
+```
+
+---
+
+## ### 🔷 **Função: editar_laboratorio**
+
+```
 labs ← listar_laboratorios
-se vazio: erro
+SE labs estiver vazio
+    Mostrar "nenhum laboratório"
+    RETORNAR
 
-mostrar lista com índices
+Mostrar lista numerada de laboratórios
+Ler escolha do usuário
 
-opção ← ler número
-validar índice
-
-novo_nome ← ler
-validar que não é vazio e não duplica outro laboratório
-
-confirmar alteração
-se confirmar:
-    para cada medicamento:
-        se laboratório == lab_antigo:
-            atualizar para novo_nome
-mostrar sucesso
-
+SE escolha for válida
+    lab_antigo ← laboratório escolhido
+    Ler novo_nome
+    SE novo_nome não for vazio
+        PARA cada medicamento
+            SE medicamento.laboratorio == lab_antigo
+                Trocar laboratório pelo novo_nome
+        Mostrar "Laboratório alterado"
+    SENÃO
+        Mostrar "nome inválido"
+SENÃO
+    Mostrar "opção inválida"
+```
 
 ---
 
-## *Função deletar_laboratorio()*
+## ### 🔷 **Função: deletar_laboratorio**
 
-
+```
 labs ← listar_laboratorios
-se vazio: erro
+SE labs estiver vazio
+    Mostrar "nenhum laboratório"
+    RETORNAR
 
-mostrar lista com índices
-opção ← ler número
-validar
+Mostrar lista com quantidade de medicamentos por laboratório
 
-coletar medicamentos pertencentes ao laboratório escolhido
-exibir alerta e lista dos itens que serão apagados
-
-usuário precisa digitar "CONFIRMAR"
-se confirmado:
-    remover todos medicamentos do laboratório
-mostrar sucesso
-
-
----
-
-## *Função deletar_medicamento()*
-
-
-se lista estiver vazia: erro
-
-listar medicamentos com índice
-
-opção ← ler número
-validar índice
-
-confirmar remoção
-se sim:
-    remover item da lista
-mostrar sucesso
-
+Ler escolha
+SE escolha válida
+    lab_deletar ← laboratório escolhido
+    Confirmar operação
+    SE confirmado
+        Remover todos medicamentos cujo laboratório == lab_deletar
+        Mostrar "laboratório deletado"
+    SENÃO
+        Operação cancelada
+SENÃO
+    Mostrar "opção inválida"
+```
 
 ---
 
-## *Função gerar_listas()*
+## ### 🔷 **Função: deletar_medicamento**
 
+```
+SE lista de medicamentos estiver vazia
+    Mostrar "nenhum medicamento"
+    RETORNAR
 
-se lista vazia: erro
+Mostrar lista numerada de medicamentos
+Ler escolha
 
-filtrar medicamentos em:
-    vermelhos
-    amarelos
-    verdes
-
-função auxiliar: agrupar_por_laboratorio(lista):
-    criar dicionário
-    para cada medicamento:
-        adicionar em sua chave de laboratório
-    retornar dicionário
-
-imprimir listas formatadas:
-    vermelhos agrupados
-    amarelos agrupados
-    verdes agrupados
-
-calcular estatísticas:
-    total por urgência
-    total geral
-    total de laboratórios
-
+SE escolha válida
+    Confirmar remoção
+    SE confirmado
+        Remover medicamento escolhido
+        Mostrar "removido"
+    SENÃO
+        Cancelado
+SENÃO
+    Mostrar "opção inválida"
+```
 
 ---
 
-# 🔄 3. Fluxograma (Markdown + ASCII)
+## ### 🔷 **Função: gerar_listas**
+
+```
+Separar medicamentos por urgência:
+    vermelhos, amarelos, verdes
+
+Agrupar cada cor por laboratório
+
+Para cada categoria:
+    Mostrar título
+    SE não houver medicamentos
+        Mostrar "vazio"
+    SENÃO
+        Para cada laboratório
+            Mostrar medicamentos e dados
+
+Exibir resumo geral da lista
+```
 
 ---
 
-## *Fluxo Geral do Sistema*
+## ### 🔷 **Função principal (main)**
 
+```
+Criar lista vazia de medicamentos
 
-          ┌──────────────────────┐
-          │  Início do Sistema   │
-          └─────────┬────────────┘
-                    │
-                    ▼
-          ┌──────────────────────┐
-          │ Mostrar Menu Principal│
-          └───────┬──────────────┘
-                  │
- ┌────────────────┼──────────────────────┐
- │                │                      │
- ▼                ▼                      ▼
-1 - Cadastrar   2 - Gerar listas      3 - Editar lab
- │                │                      │
- ▼                ▼                      ▼
-Função           Função                 Função
-cadastrar()      gerar_listas()         editar_laboratório()
+Mostrar título inicial
 
- ┌────────────────┼──────────────────────────────────────────┐
- │                │                                          │
- ▼                ▼                                          ▼
-4 - Deletar lab  5 - Listar labs                         6 - Deletar med
- │                │                                          │
- ▼                ▼                                          ▼
-Função           listar_laboratórios()                  deletar_medicamento()
-deletar_laboratório()
+ENQUANTO verdadeiro
+    Mostrar menu
+    Ler opção
 
-                    ▼
-          ┌──────────────────────┐
-          │  Sair do Sistema     │
-          └──────────────────────┘
-
+    SE opção == 1 → cadastrar_medicamentos
+    SENÃO SE opção == 2 → gerar_listas
+    SENÃO SE opção == 3 → editar_laboratorio
+    SENÃO SE opção == 4 → deletar_laboratorio
+    SENÃO SE opção == 5 → listar_laboratorios
+    SENÃO SE opção == 6 → SAIR
+    SENÃO SE opção == 7 → deletar_medicamento
+    SENÃO → Mostrar "inválido"
+FIM ENQUANTO
+```
 
 ---
 
-# 📝 4. Especificação em Linguagem Algorítmica (Português Estruturado)
+# ## 📌 3. Fluxograma (em Markdown)
 
-## *Algoritmo Principal*
+Representado em formato de fluxograma textual — aceito em trabalhos acadêmicos e PDFs.
 
+---
 
-Algoritmo SistemaDeGestaoFarmaceutica
+## ### 🔷 **Fluxograma Geral do Sistema**
+
+```
+            ┌─────────────────────────┐
+            │ Início do Programa       │
+            └─────────────┬───────────┘
+                          │
+                ┌─────────▼───────────┐
+                │ Exibe Menu Principal │
+                └───────┬─────────────┘
+                        │
+        ┌───────────────┼─────────────────────────┐
+        │               │                         │
+   ┌────▼───┐     ┌─────▼─────┐          ┌────────▼──────┐
+   │ Opção 1│     │ Opção 2    │          │ Opção 3        │
+   │Cadastrar│    │Gerar Listas│          │Editar Lab      │
+   └────┬────┘     └─────┬─────┘          └──────┬────────┘
+        │                │                       │
+        ▼                ▼                       ▼
+Executa função   Exibe listas por urgência   Edita laboratório
+        │                │                       │
+        ├────────────────┼───────────────────────┤
+        │                │                       │
+        ▼                ▼                       ▼
+   ┌────┴─────┐    ┌─────┴──────┐           ┌────┴─────┐
+   │ Opção 4   │    │ Opção 5    │           │ Opção 7   │
+   │Excluir Lab│    │Listar Labs │           │Excluir Med│
+   └────┬──────┘    └─────┬──────┘           └────┬──────┘
+        │                 │                     │
+        └─────────────────┼─────────────────────┘
+                          │
+               ┌──────────▼─────────┐
+               │ Opção 6 → Sair      │
+               └──────────┬─────────┘
+                          │
+                   ┌──────▼───────┐
+                   │ Encerrar     │
+                   └──────────────┘
+```
+
+---
+
+# ## 📌 4. Especificação em Linguagem Algorítmica
+
+*(Estilo Portugol / Portugol Studio / Algoritmo Genérico)*
+
+---
+
+### **Algoritmo: SistemaFarmacia**
+
+```
+INÍCIO
     medicamentos ← lista vazia
 
-    Enquanto verdadeiro faça
-        MostrarMenuPrincipal()
+    ESCREVA "Sistema de Lista de Compras"
 
-        Leia opcao
+    REPITA
+        ESCREVA menu
 
-        Se opcao = "1" então
-            cadastrar_medicamentos(medicamentos)
+        LEIA opcao
 
-        Senão se opcao = "2" então
-            gerar_listas(medicamentos)
-
-        Senão se opcao = "3" então
-            editar_laboratorio(medicamentos)
-
-        Senão se opcao = "4" então
-            deletar_laboratorio(medicamentos)
-
-        Senão se opcao = "5" então
-            listar_laboratorios(medicamentos)
-
-        Senão se opcao = "6" então
-            deletar_medicamento(medicamentos)
-
-        Senão se opcao = "7" então
-            Pare
-
-    FimEnquanto
-FimAlgoritmo
-
-
----
+        CASO opcao SEJA
+            1: chamar cadastrar_medicamentos
+            2: chamar gerar_listas
+            3: chamar editar_laboratorio
+            4: chamar deletar_laboratorio
+            5: mostrar laboratórios cadastrados
+            6: ENCERRAR
+            7: chamar deletar_medicamento
+            OUTRO: ESCREVER "opção inválida"
+        FIM CASO
+    ATÉ opcao == 6
+FIM
