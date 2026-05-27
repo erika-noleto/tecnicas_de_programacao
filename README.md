@@ -9,11 +9,6 @@ Registrar e disponibilizar os códigos, exercícios e práticas realizados ao lo
 
 ---
 
-## 🧰 Tecnologias e Ferramentas
-- Linguagens utilizadas: *ex.: Python, Java, C++*  
-- Ambientes e ferramentas: *VSCode, Git, etc.*  
-
----
 
 ## 👨‍🎓 Público Destinado
 Estudantes da disciplina de **Técnicas de Programação** e demais interessados nos conteúdos abordados no curso de Engenharia de Software.
